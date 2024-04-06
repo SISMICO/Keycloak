@@ -18,6 +18,18 @@ services:
     depends_on:
       - postgres
 
+  web:
+    hostname: website
+    container_name: website
+    build:
+      context: ./nextjs-oauth2-example
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - keycloak
+
   postgres:
     hostname: postgres
     container_name: postgres
