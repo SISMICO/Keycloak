@@ -1,0 +1,90 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Keycloak",
+    "dateExported": "2024-04-06T00:56:39.279Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "451e7661-d3db-4a95-a96d-769f83eabae2",
+            "colId": "1f48e305-2255-4676-9ad5-e73674dff179",
+            "containerId": "",
+            "name": "Login",
+            "url": "https://localhost:8443/realms/master/protocol/openid-connect/token",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-04-05T23:21:00.796Z",
+            "modified": "2024-04-06T00:54:04.619Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "formencoded",
+                "raw": "",
+                "form": [
+                    {
+                        "name": "username",
+                        "value": "test@test.com"
+                    },
+                    {
+                        "name": "password",
+                        "value": "123456"
+                    },
+                    {
+                        "name": "client_id",
+                        "value": "myservice"
+                    },
+                    {
+                        "name": "client_secret",
+                        "value": "VCkSkWuWuFBhjZdrpr2GcL4BTrSiATXI"
+                    },
+                    {
+                        "name": "grant_type",
+                        "value": "password"
+                    },
+                    {
+                        "name": "scope",
+                        "value": "openid"
+                    }
+                ]
+            },
+            "tests": []
+        },
+        {
+            "_id": "02205a20-3536-4b6e-b0b8-eb2a427908bb",
+            "colId": "1f48e305-2255-4676-9ad5-e73674dff179",
+            "containerId": "",
+            "name": "Get OpenID Configurations",
+            "url": "https://localhost:8443/realms/master/.well-known/openid-configuration",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2024-04-05T23:29:18.103Z",
+            "modified": "2024-04-05T23:42:52.778Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "39d32669-11f3-4a3b-a86b-38d6d5cdf0c0",
+            "colId": "1f48e305-2255-4676-9ad5-e73674dff179",
+            "containerId": "",
+            "name": "Get UserInfo",
+            "url": "https://localhost:8443/realms/master/protocol/openid-connect/userinfo",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2024-04-06T00:38:43.133Z",
+            "modified": "2024-04-06T00:54:21.814Z",
+            "headers": [
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                }
+            ],
+            "params": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJyRTRFbG1KNkU4OEFueUlRSDhkSWRuLWk2N3RSc3ZpS29pektqUjZqMTI0In0.eyJleHAiOjE3MTIzNjQ5MDQsImlhdCI6MTcxMjM2NDg0NCwianRpIjoiMTNmMDg4MzYtYjNiOC00ZDdkLTkyNzQtZTU1NmI5OWViZjIzIiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6ODQ0My9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjVkZDI3OWYwLTNlNjYtNGEzMS1iZWMwLTY3Yzg5NzlmOGJiNiIsInR5cCI6IkJlYXJlciIsImF6cCI6Im15c2VydmljZSIsInNlc3Npb25fc3RhdGUiOiI5ZDkzNmYyYi03OTY1LTQzNjgtYmRmOS05MjdiOGJhMGE2MDkiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1tYXN0ZXIiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInNpZCI6IjlkOTM2ZjJiLTc5NjUtNDM2OC1iZGY5LTkyN2I4YmEwYTYwOSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6IlRlc3QgVXNlciIsInByZWZlcnJlZF91c2VybmFtZSI6InRlc3QiLCJnaXZlbl9uYW1lIjoiVGVzdCIsImZhbWlseV9uYW1lIjoiVXNlciIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSJ9.iHY4MARW0xGME4l34zD_oghHgQpo803YcKlhwIo6J2SYNyOeyxa_40Z0j5TpjIvczifqo7VZWPuGcZzJ8bVPqG0Cqr3LoCIDhk2petWZYYVyusLGhAdPk6ME4_SH-fTfx7dZ1TgCjWi8LYU1ylBmP1sjMFPumNwX2couKkn72iJ0CouN34yD-Pzbh0JwMzrdvjg6K1PeH1iozLCgInTYtIPXdAn81rFQmxxny1uIAnA5iPOhH6sMBkfmSEL8ZnD_i9wfbAzcTI3YhyeZwKp-kESa_Zf_ingqfOmnn9Jqm8QXmluzNkZLHXFGHzYvjwuPDs7IBEjXPHdEG2kXJwtX3w"
+            },
+            "tests": []
+        }
+    ]
+}
