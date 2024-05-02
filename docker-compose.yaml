@@ -11,6 +11,8 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - ./keycloak/themes:/opt/keycloak/themes
     command: start-dev
     ports:
       - "8080:8080"
@@ -29,6 +31,28 @@ services:
       - "3000:3000"
     depends_on:
       - keycloak
+  
+  dotnet:
+    hostname: dotnet
+    container_name: dotnet
+    build:
+      context: ./dotnet-backend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8050:80"
+
+  laravel:
+    hostname: laravel
+    container_name: laravel
+    build:
+      context: ./laravel-backend/docker/8.3
+      dockerfile: Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP}'
+    restart: always
+    ports:
+      - "8051:80"
 
   postgres:
     hostname: postgres

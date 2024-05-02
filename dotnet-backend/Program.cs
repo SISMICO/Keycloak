@@ -15,8 +15,8 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    options.Authority = "http://localhost:8080/realms/master";
-    options.Audience = "master-realm";
+    options.Authority = builder.Configuration["JWT:Authority"]; // "http://localhost:8080/realms/master";
+    options.Audience = builder.Configuration["JWT:Audience"];
     options.RequireHttpsMetadata = false;
     options.TokenValidationParameters.ValidateIssuer = false;
     options.TokenValidationParameters.ValidateAudience = true;
