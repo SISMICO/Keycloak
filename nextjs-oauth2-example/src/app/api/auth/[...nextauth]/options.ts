@@ -25,14 +25,59 @@ export const options: NextAuthOptions = {
   ],
   callbacks: {
     async session({ session, user, token }) {
-      session.accessToken = token.accessToken;
+      session.access_token = token.access_token;
+      session.user = token.user;
       return session
     },
-    async jwt({ token, account, profile }) {
+    async jwt({ token, account, user }) {
+      console.log(`Account: ${JSON.stringify(account)}`)
+      
       if (account) {
-        token.accessToken = account.access_token;
+        //token.accessToken = account.access_token;
+        return {
+          access_token: account.access_token,
+          expires_at: account.expires_at,
+          refresh_token: account.refresh_token,
+          user: user,
+        }
+      } else if (Date.now() < account?.expires_at * 1000) {
+        return token
+      } else {
+        if (!token.refresh_token) throw new Error("Missing refresh token")
+
+        // If the access token has expired, try to refresh it
+        try {
+          // https://accounts.google.com/.well-known/openid-configuration
+          // We need the `token_endpoint`.
+          const response = await fetch("http://localhost:8080/realms/master/protocol/openid-connect/token", {
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+              client_id: process.env.KEYCLOAK_ID! as string,
+              client_secret: process.env.KEYCLOAK_SECRET! as string,
+              grant_type: "refresh_token",
+              refresh_token: token.refresh_token as string,
+            }),
+            method: "POST",
+          })
+
+          const tokens = await response.json()
+
+          if (!response.ok) throw tokens
+
+          return {
+            ...token, // Keep the previous token properties
+            access_token: tokens.access_token,
+            expires_at: Math.floor(Date.now() / 1000 + tokens.expires_in),
+            // Fall back to old refresh token, but note that
+            // many providers may only allow using a refresh token once.
+            refresh_token: tokens.refresh_token ?? token.refresh_token,
+          }
+        } catch (error) {
+          console.error("Error refreshing access token", error)
+          // The error property will be used client-side to handle the refresh token error
+          return { ...token, error: "RefreshAccessTokenError" as const }
+        }
       }
-      return token
-    }
-  }
+    },
+  },
 };

@@ -1,12 +1,11 @@
 import Image from "next/image";
-import { SessionProvider, getSession, signOut, useSession } from 'next-auth/react';
 import { getServerSession } from 'next-auth';
 import { options } from '@/app/api/auth/[...nextauth]/options';
 import Weather from './component/weather';
 
 export default async function Home() {
   const session = await getServerSession(options)
-  
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
