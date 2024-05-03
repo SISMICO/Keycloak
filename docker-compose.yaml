@@ -49,10 +49,12 @@ services:
       context: ./laravel-backend/docker/8.3
       dockerfile: Dockerfile
       args:
-        WWWGROUP: '${WWWGROUP}'
+        WWWGROUP: '${WWWGROUP:-1000}'
     restart: always
     ports:
       - "8051:80"
+    volumes:
+      - './laravel-backend:/var/www/html'
 
   postgres:
     hostname: postgres

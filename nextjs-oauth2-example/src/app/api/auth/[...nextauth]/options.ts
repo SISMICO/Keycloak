@@ -1,6 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 
+
 // Define authentication options using NextAuthOptions interface
 export const options: NextAuthOptions = {
   // Customize authentication pages
@@ -22,4 +23,16 @@ export const options: NextAuthOptions = {
     }),
     // CredentialsProvider({}), // Include a Credentials provider (username/password)
   ],
+  callbacks: {
+    async session({ session, user, token }) {
+      session.accessToken = token.accessToken;
+      return session
+    },
+    async jwt({ token, account, profile }) {
+      if (account) {
+        token.accessToken = account.access_token;
+      }
+      return token
+    }
+  }
 };
