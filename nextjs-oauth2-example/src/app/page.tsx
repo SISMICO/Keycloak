@@ -2,9 +2,25 @@ import Image from "next/image";
 import { getServerSession } from 'next-auth';
 import { options } from '@/app/api/auth/[...nextauth]/options';
 import Weather from './component/weather';
+import { signIn } from 'next-auth/react';
 
 export default async function Home() {
-  const session = await getServerSession(options)
+  console.log('Passei por aqui');
+  console.log(`Options: ${JSON.stringify(options)}`);
+  let session = null;
+  try {
+    session = await getServerSession(options)
+  } catch (error) {
+    console.log('Deu Ruim aqui');
+  }
+  console.log('Cheguei por aqui');
+  console.log(JSON.stringify(session));
+  if (session?.error) {
+    console.log('Error Founded Trying to Login');
+    signIn();
+  } else {
+    console.log('Else alcançado');
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">

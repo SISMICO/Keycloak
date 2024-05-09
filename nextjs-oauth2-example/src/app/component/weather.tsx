@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 
 type Weather = {
@@ -11,15 +11,15 @@ export default function Weather() {
   const [weather, setWeather] = useState<Weather[]>([]);
   const { data: session, status } = useSession();
   useEffect(() => {
-    console.log(`Weather Is Authenticated: ${status}`)
     if (status === 'authenticated') {
-      console.log(`Weather Session: ${session.access_token}`)
       fetch('http://localhost:8051/test', {
         headers: {
           Authorization: `Bearer ${session?.access_token}`,
         }
       }).then((data) => data.json())
         .then((data) => setWeather(data))
+    } else if (status === 'unauthenticated') {
+      signIn()
     }
   }, [session, status]);
 

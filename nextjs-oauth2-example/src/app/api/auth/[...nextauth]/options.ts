@@ -1,6 +1,9 @@
 import type { NextAuthOptions } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 
+const isRefreshTokenValid = (expiresAt: number): boolean => {
+  return Date.now() < expiresAt * 1000
+}
 
 // Define authentication options using NextAuthOptions interface
 export const options: NextAuthOptions = {
@@ -25,28 +28,35 @@ export const options: NextAuthOptions = {
   ],
   callbacks: {
     async session({ session, user, token }) {
-      session.access_token = token.access_token;
-      session.user = token.user;
+      if (token) {
+        session.access_token = token.access_token;
+        session.user = token.user;
+      }
       return session
     },
     async jwt({ token, account, user }) {
-      console.log(`Account: ${JSON.stringify(account)}`)
-      
-      if (account) {
-        //token.accessToken = account.access_token;
+      // console.log(`Account: ${JSON.stringify(account)}`)
+      // console.log(`Token: ${JSON.stringify(token)}`)
+      // console.log(`User: ${JSON.stringify(user)}`)
+
+      if (account && user) {
         return {
           access_token: account.access_token,
           expires_at: account.expires_at,
           refresh_token: account.refresh_token,
           user: user,
         }
-      } else if (Date.now() < account?.expires_at * 1000) {
+      }
+      
+      if (token && token.expires_at && isRefreshTokenValid(token.expires_at)) {
         return token
       } else {
+        // if (token.refresh_token) token.refresh_token = undefined;
         if (!token.refresh_token) throw new Error("Missing refresh token")
 
         // If the access token has expired, try to refresh it
         try {
+          console.log('Refreshing token')
           // https://accounts.google.com/.well-known/openid-configuration
           // We need the `token_endpoint`.
           const response = await fetch("http://localhost:8080/realms/master/protocol/openid-connect/token", {
@@ -75,7 +85,8 @@ export const options: NextAuthOptions = {
         } catch (error) {
           console.error("Error refreshing access token", error)
           // The error property will be used client-side to handle the refresh token error
-          return { ...token, error: "RefreshAccessTokenError" as const }
+          throw { ...token, error: "RefreshAccessTokenError" as const }
+          // return { ...token, error: "RefreshAccessTokenError" as const }
         }
       }
     },
